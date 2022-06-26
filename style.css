@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+@keyframes titulo {
+    0% {color: white;}
+    25% {color: fuchsia;}
+    50% {color: blue;}
+    100% {color: white;}
+}
+
+
+
+body {
+    background-color: black;
+    color: white;
+}
+
+.inicio__tareas {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    padding: 100px 20px 0px 20px;
+    align-content: center;
+    align-items: center;
+}
+
+#titulo {
+    font-family: 'Press Start 2P', cursive;
+    padding: none;
+    animation: titulo;
+    animation-duration: 4s;
+    animation-delay: 1s;
+    animation-iteration-count: infinite;
+}
+
+#form_nueva_tarea {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    column-gap: 1px;
+    padding-top: 20px;
+}
+
+#input_nueva_tarea {
+    width: 30vw;
+    padding: 0px 30px;
+    height: 30px;
+    border: none;
+    background-color: #202020;
+    color: white;
+    border-radius: 1rem;
+}
+
+.text {
+    width: 30vw;
+    padding: 0px 30px;
+    height: 30px;
+    border: none;
+    background-color: #202020;
+    color: white;
+    border-radius: 1rem;
+}
+
+#btnAgregar {
+    border: none;
+    color: white;
+    background: #121FCF;
+    background: linear-gradient(to right, #121FCF 0%, #CF1512 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+#btnAgregar:hover {
+    opacity: 40%;
+}
+
+#btnCancelar {
+    border: none;
+    color: white;
+    background: #121FCF;
+    background: linear-gradient(to right, #121FCF 0%, #CF1512 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+#btnCancelar:hover {
+    opacity: 40%;
+}
+
+#misTareas:hover {
+    font-size: 150%;
+}
+
+/* Estilos tareas agregadas */
+
+#tareas__agregadas {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    padding: 20px 0px;
+    align-content: center;
+    align-items: center;
+}
+
+.tarea {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    width: 100%;
+    height: auto;
+    padding: 20px 20px 0px 20px;
+    align-content: center;
+    align-items: center;
+    align-self: center;
+}
+
+.edit {
+    border: none;
+    color: white;
+    background: #121FCF;
+    background: linear-gradient(to right, #121FCF 0%, #CF1512 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.edit:hover {
+    opacity: 40%;
+}
+
+.delete {
+    border: none;
+    color: white;
+    background: #121FCF;
+    background: linear-gradient(to right, #121FCF 0%, #CF1512 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.delete:hover {
+    opacity: 40%;
+}

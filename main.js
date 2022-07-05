@@ -10,12 +10,12 @@ window.addEventListener('load', () => {
     const lista = document.querySelector("#tareas__agregadas");
 
     //Agregamos event listener al formulario
+
     
     formato.addEventListener("submit", (e) => {
         e.preventDefault();
 
         // Agregamos los elementos de HTML para cada nueva tarea
-
         const tarea = input.value;
         tareasPendientes.push(tarea);
         const itemTarea = document.createElement('div');

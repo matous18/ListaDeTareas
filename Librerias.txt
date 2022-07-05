@@ -1,0 +1,1 @@
+Como libreria, decdí utilizas anime.js para poder darle animación a mi página web. 

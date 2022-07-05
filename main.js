@@ -71,6 +71,7 @@ window.addEventListener('load', () => {
 
         borrarTareas.addEventListener('click', (e) => {
             lista.removeChild(itemTarea);
+            tareasPendientes.splice(index,1);
         });
     });
 

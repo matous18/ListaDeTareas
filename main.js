@@ -1,149 +1,145 @@
-window.addEventListener('load', () => {
-    
-    //Seleccionamos los elementos
-    
-    const formato = document.querySelector("#form_nueva_tarea");
-    const input = document.querySelector("#input_nueva_tarea");
-    const lista = document.querySelector("#tareas__agregadas");
-    
-    //Declaramos variables y arrays
-    
-    let tareasPendientes, id;
-    const llaveLocal = 'pendiente';
-    
-    //Obtenemos item del localstorage
-    
-    let datos = localStorage.getItem(llaveLocal);
-    
-    //verificamos que si está vacio
-    
-    if(datos){
-        tareasPendientes = JSON.parse(datos);
-        id = tareasPendientes.length;
-        cargarLista(tareasPendientes);
-    
-    }else{ //si está vacío
-        tareasPendientes = [];
-        id = 0;
+window.onload = cargarTareas;
+
+// Agregamos tareas en submit
+document.querySelector("#form_nueva_tarea").addEventListener("submit", e => {
+      e.preventDefault();
+      agregarTarea();
+
+      const tareaN = document.querySelector("#input_nueva_tarea");
+      const tareasPendientes = [];
+      let id;
+
+      if(tareaN){
+
+        tareasPendientes.push({
+          tarea: tareaN,
+          id: id,
+      });
+      
+      fetch('http://localhost:3000/tasks/', {
+          method: 'POST',
+          body: JSON.stringify({
+              tarea: tareaN,
+              id: id
+          }),
+          headers: {
+              'Content-type': 'applications/json; charset=UTF-8',
+          },
+      })
+      .then((response) => response.json())
+      .then((json) =>console.log(json));
+
+      id++;
+      }
+});
+
+function cargarTareas() {
+
+    //Chequeamos el localStorage
+    if (localStorage.getItem("tareas") == null) return;
+
+    // Cargamos las tareas a un array
+    let tareas = Array.from(JSON.parse(localStorage.getItem("tareas")));
+  
+    // Hacemos loop a las tareas y agregamos a la lista
+    tareas.forEach(tarea => {
+      const lista = document.querySelector("ul");
+      const item = document.createElement("li");
+      item.innerHTML = `<input type="checkbox" onclick="completarTarea(this)" class="check" ${tarea.completed ? 'checked' : ''}>
+            <input type="text" value="${tarea.tarea}" class="tarea ${tarea.completed ? 'completed' : ''}" onfocus="obtenerTareaActual(this)" onblur="editarTarea(this)">
+            <i class="fa fa-trash" onclick="eliminarTarea(this)"></i>`;
+      lista.insertBefore(item, lista.children[0]);
+    });
+}
+
+function agregarTarea () {
+    const tarea = document.querySelector("form input");
+    const lista = document.querySelector("ul");
+
+    //hacemos return si no hay tareas
+    if (tarea.value === "") {
+        alert("¡Oop! Olvidaste agregar una tarea.");
+        return false;
     }
-    
-    //función para cargar los items
-    function cargarLista(array){
-        array.forEach(function(inputTareaItem){
-            guardarYMostrar(inputTareaItem);
-        });
+    //Chequeamos si ya existe
+    if (document.querySelector(`input[value="${tarea.value}"]`)) {
+        alert("¡Ay! Ya pusiste esta tarea.");
+        return false;
     }
-    
-    //función para agreagar tarea
-    
-    function agregarTarea(tarea){
-    
-        itemTarea = document.createElement('div');
-        itemTarea.classList.add('tarea');
-    
-        const tareaContenido = document.createElement('div');
-        tareaContenido.classList.add('contenido');
-    
-        itemTarea.appendChild(tareaContenido);
-    
-        const inputTareaItem = document.createElement('input');
-        inputTareaItem.classList.add('text');
-        inputTareaItem.type = 'text';
-        inputTareaItem.value = tarea;
-        inputTareaItem.setAttribute('readonly', 'readonly');
-    
-        tareaContenido.appendChild(inputTareaItem);
+
+    //Agregamos al localStorage
+    localStorage.setItem("tareas", JSON.stringify([...JSON.parse(localStorage.getItem("tareas") || "[]"), {tarea: tarea.value, completed:false}]));
+
+    //Creamos un item, agregamos el innerHTML y append
+    const item = document.createElement("li");
+    item.innerHTML = `<input type="checkbox" onclick="completarTarea(this)" class="check">
+    <input type="text" value="${tarea.value}" class="tarea" onfocus="obtenerTareaActual(this)" onblur="editarTarea(this)">
+    <i class="fa fa-trash" onclick="eliminarTarea(this)"></i>`;
+    lista.insertBefore(item, lista.children[0]);
+    // Limpiamos el input
+    tarea.value = "";
+}
+
+function completarTarea(evento) {
+    let tareas = Array.from(JSON.parse(localStorage.getItem("tareas")));
+    tareas.forEach(tarea => {
+      if (tarea.tarea === evento.nextElementSibling.value) {
+        tarea.completed = !tarea.completed;
+      }
+    });
+    localStorage.setItem("tareas", JSON.stringify(tareas));
+    evento.nextElementSibling.classList.toggle("completed");
+}
+
+function eliminarTarea(evento) {
+    let tareas = Array.from(JSON.parse(localStorage.getItem("tareas")));
+    tareas.forEach(tarea => {
+      if (tarea.tarea === evento.parentNode.children[1].value) {
+        // Borramos
+        tareas.splice(tareas.indexOf(tarea), 1);
+      }
+    });
+    localStorage.setItem("tareas", JSON.stringify(tareas));
+    evento.parentElement.remove();
+
+    fetch('http://localhost:3000/tasks/', {
+        method: 'DELETE',
+    });
+}
+
+  // guardamos la tarea actual para guardar cambios
+var tareaActual = null;
+
+// get current task
+function obtenerTareaActual(evento) {
+    tareaActual = evento.value;
+}
+
+  // editamos la tarea y actualizamos el localStorage
+function editarTarea(evento) {
+    let tareas = Array.from(JSON.parse(localStorage.getItem("tareas")));
+    // Chequeamos que esté vacío
+    if (evento.value === "") {
+      alert("¡No tienes pendientes!");
+      evento.value = tareaActual;
+      return;
     }
-    
-    //función para almacenar
-    
-    function guardar() {
-        localStorage.setItem(llaveLocal, JSON.stringify(tareasPendientes));
-    }
-    
-    function guardarYMostrar (tarea){
-        guardar();
-        agregarTarea(tarea);
-    }
-    
-    //agregar el item
-    
-    formato.addEventListener("submit", (e) => {
-        e.preventDefault();
-    
-        const tarea =input.value;
-    
-        if(tarea){
-    
-            agregarTarea(tarea);
-    
-            tareasPendientes.push({
-                tarea: tarea,
-                id: id
-            });
-            
-            fetch('http://localhost:3000/tasks/', {
-                method: 'POST',
-                body: JSON.stringify({
-                    tarea: tarea,
-                    id: id
-                }),
-                headers: {
-                    'Content-type': 'applications/json; charset=UTF-8',
-                },
-            })
-            .then((response) => response.json())
-            .then((json) =>console.log(json));
-    
-            //agregamos al local storage
-            guardar();
-    
-            id++;
-        }
-    
-        //Definimos las acciones de los botonos eliminar y editar
-    
-        const accionesTareas = document.createElement('div');
-        accionesTareas.classList.add('actions');
-    
-        const editarTareas = document.createElement('button');
-        editarTareas.classList.add('edit');
-        editarTareas.innerText = 'Editar';
-    
-        const borrarTareas = document.createElement('button');
-        borrarTareas.classList.add('delete');
-        borrarTareas.innerText = 'X';
-    
-        accionesTareas.appendChild(editarTareas);
-        accionesTareas.appendChild(borrarTareas);
-    
-        
-        itemTarea.appendChild(accionesTareas);
-    
-        lista.appendChild(itemTarea);
-    
-        input.value = '';
-    
-        editarTareas.addEventListener('click', (e) => {
-            if (editarTareas.innerText.toLowerCase() == "editar") {
-                editarTareas.innerText = "Guardar";
-                inputTareaItem.removeAttribute("readonly");
-                inputTareaItem.focus();
-            } else {
-                editarTareas.innerText = "Editar";
-                inputTareaItem.setAttribute("readonly", "readonly");
-            }
-        });
-    
-        borrarTareas.addEventListener('click', (e) => {
-    
-                lista.removeChild(itemTarea);
-                tareasPendientes.splice(index,1);
-                fetch('http://localhost:3000/tasks/', {
-                    method: 'DELETE',
-                });
-        });
+
+    // Si la tarea ya existe
+    tareas.forEach(tarea => {
+      if (tarea.tarea === evento.value) {
+        alert("¡Oops! Ya pusiste esta tarea.");
+        evento.value = tareaActual;
+        return;
+      }
     });
 
-});    
-
+    // Actualizamos tareas
+    tareas.forEach(tarea => {
+      if (tarea.tarea === tareaActual) {
+        tarea.tarea = evento.value;
+      }
+    });
+    // Actualizamos el localStorage
+    localStorage.setItem("tareas", JSON.stringify(tareas));
+}

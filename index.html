@@ -5,24 +5,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <script defer src="main.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script defer src="animacion.js"></script>
+    <script defer src="main.js"></script>
     <title>Tareas por hacer</title>
 </head>
 <body>
-    <header class="inicio__tareas">
-        <h1 id="titulo">Tareas por hacer</h1>
-        <form action="" id="form_nueva_tarea">
-            <input type="text" name= "content" placeholder="¿Qué tienes pendiente para hoy?" id="input_nueva_tarea">
-            <button type="submit" id="btnAgregar">Agregar</button>
-            <button type="button" id="btnCancelar">X</button>
-        </form>
-    </header>
-    <main>
-        <section id="tareas__agregadas">
-            <h3 id="misTareas">Mis tareas</h3>
-        </section>
-    </main>
+    <div class="container">
+        <div class="app">
+            <header class="inicio__tareas">
+                <h1 id="titulo">Tareas por hacer</h1>
+            </header>
+            <form action="" id="form_nueva_tarea">
+                <input type="text" name= "content" placeholder="¿Qué tienes pendiente para hoy?" id="input_nueva_tarea">
+                <button type="submit" id="btnAgregar">Agregar</button>
+                <button type="button" id="btnCancelar">X</button>
+            </form>
+            <main>
+                <section id="tareas__agregadas">
+                    <h3 id="misTareas">Mis tareas</h3>
+                    <ul>
+                        <li></li>
+                    </ul>
+                </section>
+            </main>
+        </div>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha512-z4OUqw38qNLpn1libAN9BsoDx6nbNFio5lA6CuTp9NlK83b89hgyCVq+N5FdBJptINztxn1Z3SaKSKUS5UP60Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
 </html>
